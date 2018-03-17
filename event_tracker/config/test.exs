@@ -12,8 +12,8 @@ config :logger, level: :warn
 # Configure your database
 config :event_tracker, EventTracker.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "password",
+  # username: "postgres", # I've removed this as my local nix environment doesn't need them
+  # password: "postgres", # I've removed this as my local nix environment doesn't need them
   database: "event_tracker_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox

@@ -39,8 +39,8 @@ config :phoenix, :stacktrace_depth, 20
 # Configure your database
 config :event_tracker, EventTracker.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "password",
   database: "event_tracker_dev",
+  # username: "postgres", # I've removed this as my local nix environment doesn't need them
+  # password: "postgres", # I've removed this as my local nix environment doesn't need them
   hostname: "localhost",
   pool_size: 10
