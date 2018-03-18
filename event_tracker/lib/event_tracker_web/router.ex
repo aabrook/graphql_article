@@ -5,7 +5,6 @@ defmodule EventTrackerWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", EventTrackerWeb do
-    pipe_through :api
-  end
+  forward "/api", Absinthe.Plug,
+    schema: EventTracker.Schema
 end
