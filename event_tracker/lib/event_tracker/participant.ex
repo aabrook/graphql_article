@@ -8,7 +8,7 @@ defmodule EventTracker.Participant do
   schema "participants" do
     field(:name, :string)
 
-    belongs_to :event, Event, foreign_key: :event_id, references: :id, type: :binary_id
+    belongs_to(:event, Event, foreign_key: :event_id, references: :id, type: :binary_id)
 
     timestamps()
   end

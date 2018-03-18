@@ -19,7 +19,7 @@ defmodule EventTracker.Test.Factory do
   ## Examples
       user = create(EventTracker.Participant, name: "Penny P. Hacker")
   """
-  @spec create(module, Enum.t) :: struct
+  @spec create(module, Enum.t()) :: struct
   def create(schema, attributes) do
     schema
     |> create()
@@ -31,8 +31,8 @@ defmodule EventTracker.Test.Factory do
   ## Examples
       user = insert(EventTracker.Participant, name: "Penny P. Hacker")
   """
-  @spec insert(module, Enum.t) :: struct
+  @spec insert(module, Enum.t()) :: struct
   def insert(schema, attributes \\ []) do
-    EventTracker.Repo.insert! create(schema, attributes)
+    EventTracker.Repo.insert!(create(schema, attributes))
   end
 end

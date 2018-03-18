@@ -15,6 +15,4 @@ defmodule EventTracker.Types do
 
     field(:event, :event, resolve: assoc(:event))
   end
-
 end
-

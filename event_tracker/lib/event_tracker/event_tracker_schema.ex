@@ -5,7 +5,7 @@ defmodule EventTracker.Schema do
   import Ecto.Query
   alias EventTracker.{Event, Participant, Repo}
 
-  import_types EventTracker.Types
+  import_types(EventTracker.Types)
 
   query do
     field :events, list_of(:event) do
@@ -33,11 +33,14 @@ defmodule EventTracker.Schema do
 
     {:ok, events}
   end
+
   defp list(Participant, event_id: event_id) do
     participants =
-      (from p in Participant,
+      from(
+        p in Participant,
         where: p.event_id == ^event_id,
-        order_by: :inserted_at)
+        order_by: :inserted_at
+      )
       |> Repo.all()
 
     case participants do

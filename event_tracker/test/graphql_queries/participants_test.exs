@@ -1,13 +1,7 @@
 defmodule EventTrackerWeb.GraphQL.ParticipantsTest do
   use EventTrackerWeb.ConnCase, async: true
 
-  # Bring render/3 and render_to_string/3 for testing custom views
-  import Phoenix.View
-  import EventTrackerWeb.Router.Helpers
-  import Ecto.Query
-
-
-  alias EventTracker.{Event, Participant, Repo}
+  alias EventTracker.{Event, Participant}
   alias EventTracker.Test.Factory
 
   test "can list all participants of an event", %{conn: conn} do
@@ -32,7 +26,7 @@ defmodule EventTrackerWeb.GraphQL.ParticipantsTest do
     assert result == %{
              "participants" => [
                %{
-                 "name" => participant.name,
+                 "name" => participant.name
                }
              ]
            }
