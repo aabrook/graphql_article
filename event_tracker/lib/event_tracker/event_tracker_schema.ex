@@ -3,15 +3,9 @@ defmodule EventTracker.Schema do
   use Absinthe.Schema.Notation
 
   import Ecto.Query
-  alias EventTracker.Repo
+  alias EventTracker.{Event, Repo}
 
-  alias EventTracker.Event
-
-  object :event do
-    field(:id, :id)
-    field(:name, :string)
-    field(:activity_type, list_of(:string))
-  end
+  import_types EventTracker.Types
 
   query do
     field :events, list_of(:event) do
