@@ -5,7 +5,7 @@ defmodule EventTrackerWeb.GraphQL.EventsTest do
   import Phoenix.View
   import EventTrackerWeb.Router.Helpers
 
-  alias EventTracker.{Event, Repo}
+  alias EventTracker.{Event, Participant, Repo}
   alias EventTracker.Test.Factory
 
   test "can list all events", %{conn: conn} do
@@ -19,6 +19,7 @@ defmodule EventTrackerWeb.GraphQL.EventsTest do
     """
 
     event = Factory.insert(Event)
+    Factory.insert(Participant, %{event: event})
 
     %{"data" => result} =
       conn
@@ -60,6 +61,40 @@ defmodule EventTrackerWeb.GraphQL.EventsTest do
              "event" => %{
                "name" => event.name,
                "activity_type" => event.activity_type
+             }
+           } == result
+  end
+
+  test "can get a single event with participants", %{conn: conn} do
+    event = Factory.insert(Event)
+    participant = Factory.insert(Participant, %{event: event})
+
+    query = """
+    {
+      event(id: "#{event.id}") {
+        name
+        activity_type
+        participants {
+          name
+        }
+      }
+    }
+    """
+
+    %{"data" => result} =
+      conn
+      |> Plug.Conn.put_req_header("content-type", "application/graphql")
+      |> get("/api", query)
+      |> Map.get(:resp_body)
+      |> Poison.decode!()
+
+    assert %{
+             "event" => %{
+               "name" => event.name,
+               "activity_type" => event.activity_type,
+               "participants" => [
+                 %{ "name" => participant.name }
+               ]
              }
            } == result
   end

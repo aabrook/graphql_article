@@ -2,6 +2,8 @@ defmodule EventTracker.Event do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias EventTracker.Participant
+
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "events" do
@@ -14,6 +16,7 @@ defmodule EventTracker.Event do
     field(:registration_close, :utc_datetime)
     field(:registration_open, :utc_datetime)
 
+    has_many :participants, Participant, foreign_key: :event_id
     timestamps()
   end
 

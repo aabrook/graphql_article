@@ -4,6 +4,8 @@ defmodule EventTrackerWeb.GraphQL.ParticipantsTest do
   # Bring render/3 and render_to_string/3 for testing custom views
   import Phoenix.View
   import EventTrackerWeb.Router.Helpers
+  import Ecto.Query
+
 
   alias EventTracker.{Event, Participant, Repo}
   alias EventTracker.Test.Factory
@@ -11,6 +13,7 @@ defmodule EventTrackerWeb.GraphQL.ParticipantsTest do
   test "can list all participants of an event", %{conn: conn} do
     event = Factory.insert(Event)
     participant = Factory.insert(Participant, %{event: event})
+
     query = """
     {
       participants (event_id: "#{event.id}"){
@@ -35,13 +38,17 @@ defmodule EventTrackerWeb.GraphQL.ParticipantsTest do
            }
   end
 
-  test "can get a single event", %{conn: conn} do
-    participant = Factory.insert(Participant)
+  test "can get a single participant", %{conn: conn} do
+    event = Factory.insert(Event)
+    participant = Factory.insert(Participant, %{event: event})
 
     query = """
     {
       participant (id: "#{participant.id}") {
         name
+        event {
+          name
+        }
       }
     }
     """
@@ -55,7 +62,10 @@ defmodule EventTrackerWeb.GraphQL.ParticipantsTest do
 
     assert %{
              "participant" => %{
-               "name" => participant.name
+               "name" => participant.name,
+               "event" => %{
+                 "name" => event.name
+               }
              }
            } == result
   end

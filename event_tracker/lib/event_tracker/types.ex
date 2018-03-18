@@ -6,12 +6,14 @@ defmodule EventTracker.Types do
     field(:id, :id)
     field(:name, :string)
     field(:activity_type, list_of(:string))
-    field(:participants, list_of(:participant), resolve: assoc(:participant))
+    field(:participants, list_of(:participant), resolve: assoc(:participants))
   end
 
   object :participant do
     field(:id, :id)
     field(:name, :string)
+
+    field(:event, :event, resolve: assoc(:event))
   end
 
 end
