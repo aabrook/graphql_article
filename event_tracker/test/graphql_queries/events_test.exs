@@ -5,14 +5,21 @@ defmodule EventTrackerWeb.GraphQL.EventsTest do
   import Phoenix.View
   import EventTrackerWeb.Router.Helpers
 
+  alias EventTracker.Repo
+  alias EventTracker.Event
+
   test "can list all events", %{conn: conn} do
     query = """
     {
       events {
-        name
+        name,
+        activity_type
       }
     }
     """
+
+    {:ok, _} = %Event{} |> Event.changeset(%{name: "Yo", activity_type: ["running", "riding"]}) |> Repo.insert()
+
     %{"data" => result} = conn
       |> Plug.Conn.put_req_header("content-type", "application/graphql")
       |> get("/api", query)
@@ -22,7 +29,11 @@ defmodule EventTrackerWeb.GraphQL.EventsTest do
     assert result == %{
       "events" => [
         %{
-          "name" => "Yo"
+          "name" => "Yo",
+          "activity_type" => [
+            "running",
+            "riding"
+          ]
         }
       ]
     }
