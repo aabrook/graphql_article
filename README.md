@@ -16,4 +16,9 @@ Follow prompts for initial ecto and to check the server is running
 * Follow steps https://blog.fourk.io/uuids-as-primary-keys-in-phoenix-with-ecto-and-elixir-1dd79e1ecc2e to setup uuids
 * `mix ecto.migrate`
 
+# Using this repository
 
+I have setup a default nix install to simplify development instead of managing through docker or brew on OSX. [NixOS](https://nixos.org/nix/)
+
+Once you've started a nix-shell run `setup.sh`
+Before you leave the shell run `shutdown.sh`. Shutdown will terminate services that are started within the shell
