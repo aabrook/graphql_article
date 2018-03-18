@@ -18,29 +18,35 @@ defmodule EventTrackerWeb.GraphQL.EventsTest do
     }
     """
 
-    {:ok, _} = %Event{} |> Event.changeset(%{name: "Yo", activity_type: ["running", "riding"]}) |> Repo.insert()
+    {:ok, _} =
+      %Event{} |> Event.changeset(%{name: "Yo", activity_type: ["running", "riding"]})
+      |> Repo.insert()
 
-    %{"data" => result} = conn
+    %{"data" => result} =
+      conn
       |> Plug.Conn.put_req_header("content-type", "application/graphql")
       |> get("/api", query)
       |> Map.get(:resp_body)
       |> Poison.decode!()
 
     assert result == %{
-      "events" => [
-        %{
-          "name" => "Yo",
-          "activity_type" => [
-            "running",
-            "riding"
-          ]
-        }
-      ]
-    }
+             "events" => [
+               %{
+                 "name" => "Yo",
+                 "activity_type" => [
+                   "running",
+                   "riding"
+                 ]
+               }
+             ]
+           }
   end
 
   test "can get a single event", %{conn: conn} do
-    {:ok, event} = %Event{} |> Event.changeset(%{name: "Yo", activity_type: ["running", "riding"]}) |> Repo.insert()
+    {:ok, event} =
+      %Event{} |> Event.changeset(%{name: "Yo", activity_type: ["running", "riding"]})
+      |> Repo.insert()
+
     query = """
     {
       event(id: "#{event.id}") {
@@ -49,15 +55,19 @@ defmodule EventTrackerWeb.GraphQL.EventsTest do
       }
     }
     """
-    %{"data" => result} = conn
+
+    %{"data" => result} =
+      conn
       |> Plug.Conn.put_req_header("content-type", "application/graphql")
       |> get("/api", query)
       |> Map.get(:resp_body)
       |> Poison.decode!()
 
-    assert %{ "event" => %{
-      "name" => "Yo",
-      "activity_type" => ["running", "riding"]
-    }} == result
+    assert %{
+             "event" => %{
+               "name" => "Yo",
+               "activity_type" => ["running", "riding"]
+             }
+           } == result
   end
 end

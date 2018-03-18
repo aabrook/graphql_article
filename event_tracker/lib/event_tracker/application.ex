@@ -11,7 +11,7 @@ defmodule EventTracker.Application do
       # Start the Ecto repository
       supervisor(EventTracker.Repo, []),
       # Start the endpoint when the application starts
-      supervisor(EventTrackerWeb.Endpoint, []),
+      supervisor(EventTrackerWeb.Endpoint, [])
       # Start your own worker by calling: EventTracker.Worker.start_link(arg1, arg2, arg3)
       # worker(EventTracker.Worker, [arg1, arg2, arg3]),
     ]
