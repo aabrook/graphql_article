@@ -9,7 +9,8 @@ defmodule EventTracker.Test.Factory do
 
   def create(Event) do
     %Event{
-      name: "Run for a dream"
+      name: "Run for a dream",
+      activity_type: ["running", "riding"]
     }
   end
 
