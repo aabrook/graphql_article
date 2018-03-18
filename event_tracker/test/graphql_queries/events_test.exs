@@ -12,7 +12,7 @@ defmodule EventTrackerWeb.GraphQL.EventsTest do
     query = """
     {
       events {
-        name,
+        name
         activity_type
       }
     }
@@ -37,5 +37,27 @@ defmodule EventTrackerWeb.GraphQL.EventsTest do
         }
       ]
     }
+  end
+
+  test "can get a single event", %{conn: conn} do
+    {:ok, event} = %Event{} |> Event.changeset(%{name: "Yo", activity_type: ["running", "riding"]}) |> Repo.insert()
+    query = """
+    {
+      event(id: "#{event.id}") {
+        name
+        activity_type
+      }
+    }
+    """
+    %{"data" => result} = conn
+      |> Plug.Conn.put_req_header("content-type", "application/graphql")
+      |> get("/api", query)
+      |> Map.get(:resp_body)
+      |> Poison.decode!()
+
+    assert %{ "event" => %{
+      "name" => "Yo",
+      "activity_type" => ["running", "riding"]
+    }} == result
   end
 end
