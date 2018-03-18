@@ -3,7 +3,7 @@ defmodule EventTracker.Schema do
   use Absinthe.Schema.Notation
 
   import Ecto.Query
-  alias EventTracker.{Event, Repo}
+  alias EventTracker.{Event, Participant, Repo}
 
   import_types EventTracker.Types
 
@@ -16,6 +16,16 @@ defmodule EventTracker.Schema do
       arg(:id, non_null(:id))
       resolve(fn _, %{id: id}, _ -> get(Event, id) end)
     end
+
+    field :participants, list_of(:participant) do
+      arg(:event_id, non_null(:id))
+      resolve(fn _, %{event_id: id}, _ -> list(Participant, event_id: id) end)
+    end
+
+    field :participant, :participant do
+      arg(:id, non_null(:id))
+      resolve(fn _, %{id: id}, _ -> get(Participant, id) end)
+    end
   end
 
   defp list(Event) do
@@ -23,11 +33,30 @@ defmodule EventTracker.Schema do
 
     {:ok, events}
   end
+  defp list(Participant, event_id: event_id) do
+    participants =
+      (from p in Participant,
+        where: p.event_id == ^event_id,
+        order_by: :inserted_at)
+      |> Repo.all()
+
+    case participants do
+      nil -> {:error, "Not found"}
+      participants -> {:ok, participants}
+    end
+  end
 
   defp get(Event, id) do
     case Repo.get(Event, id) do
       nil -> {:error, "Not found"}
       event -> {:ok, event}
+    end
+  end
+
+  defp get(Participant, id) do
+    case Repo.get(Participant, id) do
+      nil -> {:error, "Not found"}
+      participant -> {:ok, participant}
     end
   end
 end
