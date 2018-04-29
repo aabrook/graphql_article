@@ -12,6 +12,9 @@ defmodule EventTrackerWeb.GraphQL.ParticipantsTest do
     {
       participants (event_id: "#{event.id}"){
         name
+        event {
+          name
+        }
       }
     }
     """
@@ -21,12 +24,16 @@ defmodule EventTrackerWeb.GraphQL.ParticipantsTest do
       |> Plug.Conn.put_req_header("content-type", "application/graphql")
       |> get("/api", query)
       |> Map.get(:resp_body)
+      |> IO.inspect
       |> Poison.decode!()
 
     assert result == %{
              "participants" => [
                %{
-                 "name" => participant.name
+                 "name" => participant.name,
+                 "event" => %{
+                   "name" => "Run for a dream"
+                 }
                }
              ]
            }
