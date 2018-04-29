@@ -94,4 +94,31 @@ defmodule EventTrackerWeb.GraphQL.EventsTest do
              }
            } == result
   end
+
+  test "can create a new event", %{conn: conn} do
+    query = """
+    mutation CreateEvent {
+      create_event (name: "In memory of Jo", activity_type: ["walk", "run"]) {
+        id
+        name
+        activity_type
+      }
+    }
+    """
+
+    %{"data" => result} =
+      conn
+      |> Plug.Conn.put_req_header("content-type", "application/graphql")
+      |> post("/api", query)
+      |> Map.get(:resp_body)
+      |> Poison.decode!()
+
+    assert %{
+      "create_event" => %{
+        "id" => _,
+        "name" => "In memory of Jo",
+        "activity_type" => ["walk", "run"]
+      }
+    } = result
+  end
 end

@@ -28,6 +28,20 @@ defmodule EventTracker.Schema do
     end
   end
 
+  mutation do
+    field :create_event, :event do
+      arg :name, non_null(:string)
+      arg :activity_type, non_null(list_of(:string))
+
+      resolve &create_event/3
+    end
+  end
+
+  defp create_event(_parent, args, _context) do
+    Event.changeset(%Event{}, args)
+    |> Repo.insert
+  end
+
   defp list(Event) do
     events = Event |> Repo.all()
 
