@@ -114,12 +114,12 @@ defmodule EventTrackerWeb.GraphQL.EventsTest do
       |> Poison.decode!()
 
     assert %{
-      "create_event" => %{
-        "id" => _,
-        "name" => "In memory of Jo",
-        "activity_type" => ["walk", "run"]
-      }
-    } = result
+             "create_event" => %{
+               "id" => _,
+               "name" => "In memory of Jo",
+               "activity_type" => ["walk", "run"]
+             }
+           } = result
   end
 
   test "ensure name and activity_type are required", %{conn: conn} do
@@ -141,8 +141,8 @@ defmodule EventTrackerWeb.GraphQL.EventsTest do
       |> Poison.decode!()
 
     assert [
-        %{"message" => _},
-        %{"message" => _}
-      ] = result
-    end
+             %{"message" => _},
+             %{"message" => _}
+           ] = result
+  end
 end

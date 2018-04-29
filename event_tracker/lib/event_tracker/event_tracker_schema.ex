@@ -30,17 +30,17 @@ defmodule EventTracker.Schema do
 
   mutation do
     field :create_event, :event do
-      arg :name, non_null(:string)
-      arg :activity_type, non_null(list_of(:string))
-      arg :registration_open, :datetime
+      arg(:name, non_null(:string))
+      arg(:activity_type, non_null(list_of(:string)))
+      arg(:registration_open, :datetime)
 
-      resolve &create_event/3
+      resolve(&create_event/3)
     end
   end
 
   defp create_event(_parent, args, _context) do
     Event.changeset(%Event{}, args)
-    |> Repo.insert
+    |> Repo.insert()
   end
 
   defp list(Event) do

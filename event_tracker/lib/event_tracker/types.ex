@@ -2,7 +2,7 @@ defmodule EventTracker.Types do
   use Absinthe.Schema.Notation
   use Absinthe.Ecto, repo: EventTracker.Repo
 
-  import_types Absinthe.Type.Custom
+  import_types(Absinthe.Type.Custom)
 
   object :event do
     field(:id, :id)
