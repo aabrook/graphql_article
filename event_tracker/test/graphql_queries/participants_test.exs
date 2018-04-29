@@ -24,7 +24,6 @@ defmodule EventTrackerWeb.GraphQL.ParticipantsTest do
       |> Plug.Conn.put_req_header("content-type", "application/graphql")
       |> get("/api", query)
       |> Map.get(:resp_body)
-      |> IO.inspect
       |> Poison.decode!()
 
     assert result == %{

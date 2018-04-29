@@ -16,14 +16,6 @@ defmodule EventTracker.Types do
     field(:id, :id)
     field(:name, :string)
 
-    field(:event, :event,
-          resolve: fn _, _ ->
-            {:ok, %{
-              id: "abcd",
-              name: "Run for Jo's dream",
-              activity_type: ["run"]
-            }}
-          end
-    )
+    field(:event, :event, resolve: assoc(:event))
   end
 end
