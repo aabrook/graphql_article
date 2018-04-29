@@ -98,10 +98,11 @@ defmodule EventTrackerWeb.GraphQL.EventsTest do
   test "can create a new event", %{conn: conn} do
     query = """
     mutation CreateEvent {
-      create_event (name: "In memory of Jo", activity_type: ["walk", "run"]) {
+      create_event (name: "In memory of Jo", activity_type: ["walk", "run"], registration_open: "2018-05-02T00:00:00Z") {
         id
         name
         activity_type
+        registration_open
       }
     }
     """
@@ -117,7 +118,8 @@ defmodule EventTrackerWeb.GraphQL.EventsTest do
              "create_event" => %{
                "id" => _,
                "name" => "In memory of Jo",
-               "activity_type" => ["walk", "run"]
+               "activity_type" => ["walk", "run"],
+               "registration_open" => "2018-05-02T00:00:00Z"
              }
            } = result
   end
