@@ -32,6 +32,7 @@ defmodule EventTracker.Schema do
     field :create_event, :event do
       arg :name, non_null(:string)
       arg :activity_type, non_null(list_of(:string))
+      arg :registration_open, :datetime
 
       resolve &create_event/3
     end

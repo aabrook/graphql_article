@@ -121,4 +121,28 @@ defmodule EventTrackerWeb.GraphQL.EventsTest do
       }
     } = result
   end
+
+  test "ensure name and activity_type are required", %{conn: conn} do
+    query = """
+    mutation CreateEvent {
+      create_event (registration_open: "2018-05-02T00:00:00Z") {
+        id
+        name
+        activity_type
+      }
+    }
+    """
+
+    %{"errors" => result} =
+      conn
+      |> Plug.Conn.put_req_header("content-type", "application/graphql")
+      |> post("/api", query)
+      |> Map.get(:resp_body)
+      |> Poison.decode!()
+
+    assert [
+        %{"message" => _},
+        %{"message" => _}
+      ] = result
+    end
 end
