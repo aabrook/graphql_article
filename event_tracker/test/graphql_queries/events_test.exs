@@ -95,6 +95,64 @@ defmodule EventTrackerWeb.GraphQL.EventsTest do
            } == result
   end
 
+  test "can get an event, with participants, with event details", %{conn: conn} do
+    event = Factory.insert(Event)
+    jo = Factory.insert(Participant, event: event)
+    not_jo = Factory.insert(Participant, event: event, name: "Not Jo")
+
+    query = """
+    {
+      event(id: "#{event.id}") {
+        name
+        activity_type
+        participants {
+          name
+          event {
+            name
+            activity_type
+          }
+        }
+      }
+    }
+    """
+
+    event = %{
+      "name" => event.name,
+      "activity_type" => event.activity_type
+    }
+    expected_event = %{
+      "event" => event
+    }
+
+    participants = [
+      %{
+        "name" => jo.name,
+        "event" => event
+      },
+      %{
+        "name" => not_jo.name,
+        "event" => event
+      }
+    ]
+
+    expected_participants =
+      participants
+      |> Enum.map(&Map.put(&1, "event", expected_event))
+
+    expected_result =
+      put_in(expected_event, ["event", "participants"], expected_participants)
+
+    %{"data" => result} =
+      conn
+      |> Plug.Conn.put_req_header("content-type", "application/graphql")
+      |> get("/api", query)
+      |> Map.get(:resp_body)
+      |> Poison.decode!()
+
+
+    assert expected_result = result
+  end
+
   test "can create a new event", %{conn: conn} do
     query = """
     mutation CreateEvent {
