@@ -36,11 +36,32 @@ defmodule EventTracker.Schema do
 
       resolve(&create_event/3)
     end
+
+    field :update_event, :event do
+      arg(:id, non_null(:id))
+      arg(:name, :string)
+      arg(:activity_type, list_of(:string))
+      arg(:registration_open, :datetime)
+
+      resolve(&update_event/3)
+    end
   end
 
   defp create_event(_parent, args, _context) do
-    Event.changeset(%Event{}, args)
+    %Event{}
+    |> Event.changeset(args)
     |> Repo.insert()
+  end
+
+  def update_event(_parent, args = %{id: id}, _context) do
+    with event <- Repo.get(Event, id) do
+      event
+      |> Event.changeset(args)
+      |> Repo.update()
+    else
+      nil -> {:error, "Not found"}
+      err -> {:error, "#{inspect (err |> IO.inspect)}"}
+    end
   end
 
   defp list(Event) do

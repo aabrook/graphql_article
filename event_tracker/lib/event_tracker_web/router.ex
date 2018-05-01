@@ -6,4 +6,9 @@ defmodule EventTrackerWeb.Router do
   end
 
   forward("/api", Absinthe.Plug, schema: EventTracker.Schema)
+  if Mix.env == :dev do
+    forward "/graphiql",
+      Absinthe.Plug.GraphiQL,
+      schema: EventTracker.Schema
+  end
 end
