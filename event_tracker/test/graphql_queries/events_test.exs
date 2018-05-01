@@ -120,6 +120,7 @@ defmodule EventTrackerWeb.GraphQL.EventsTest do
       "name" => event.name,
       "activity_type" => event.activity_type
     }
+
     expected_event = %{
       "event" => event
     }
@@ -139,8 +140,7 @@ defmodule EventTrackerWeb.GraphQL.EventsTest do
       participants
       |> Enum.map(&Map.put(&1, "event", expected_event))
 
-    expected_result =
-      put_in(expected_event, ["event", "participants"], expected_participants)
+    expected_result = put_in(expected_event, ["event", "participants"], expected_participants)
 
     %{"data" => result} =
       conn
@@ -148,7 +148,6 @@ defmodule EventTrackerWeb.GraphQL.EventsTest do
       |> get("/api", query)
       |> Map.get(:resp_body)
       |> Poison.decode!()
-
 
     assert expected_result = result
   end
