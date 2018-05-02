@@ -16,6 +16,7 @@ defmodule EventTracker.Schema do
       arg(:id, non_null(:id))
       resolve(fn _, %{id: id}, _ -> get(Event, id) end)
     end
+  end
 
     field :participants, list_of(:participant) do
       arg(:event_id, non_null(:id))
